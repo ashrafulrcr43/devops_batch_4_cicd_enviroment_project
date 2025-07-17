@@ -1,0 +1,32 @@
+name: Fince Project CI/CD
+
+on: 
+    push:
+        branches:
+            - main
+jobs:
+    test:
+        runs-on: self-hosted
+
+        steps:
+            - name: Checkout Git repository
+              uses: actions/checkout@v2
+
+            - name: setup node
+              uses: actions/setup-node@v2
+
+            - name: Install Application Dependencies
+              run: npm install
+
+            - name: Pm2 Delete process if exists
+              run: pm2 delete fince-fontend || true
+
+            - name: Start The Application
+              run: pm2 start "npm run serve" --name fince-fontend 
+
+            - name: Pm2 Save Process List
+              run: pm2 save
+              
+            - name: PM2 status
+              run: pm2 status
+
