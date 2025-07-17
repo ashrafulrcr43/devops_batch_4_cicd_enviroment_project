@@ -18,15 +18,18 @@ jobs:
             - name: Install Application Dependencies
               run: npm install
 
+            - name: Run Application Tests
+              run: npm run serve
+
             - name: Pm2 Delete process if exists
               run: pm2 delete fince-fontend || true
 
-            - name: Start The Application
+            - name: Background Start The Application
               run: pm2 start "npm run serve" --name fince-fontend 
 
             - name: Pm2 Save Process List
               run: pm2 save
-              
+
             - name: PM2 status
               run: pm2 status
 
