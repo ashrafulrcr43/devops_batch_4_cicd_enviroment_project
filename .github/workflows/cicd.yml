@@ -1,35 +1,40 @@
 name: Fince Project CI/CD
 
 on: 
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+
 jobs:
-    test:
-        runs-on: self-hosted
+  deploy:
+    runs-on: self-hosted
 
-        steps:
-            - name: Checkout Git repository
-              uses: actions/checkout@v2
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v2
 
-            - name: setup node
-              uses: actions/setup-node@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # or your required version
 
-            - name: Install Application Dependencies
-              run: npm install
+      - name: Install Application Dependencies
+        run: npm install
 
-            - name: Run Application Tests
-              run: npm run serve
+      - name: Build Application
+        run: npm run build
 
-            - name: Pm2 Delete process if exists
-              run: pm2 delete fince-fontend || true
+      - name: Install Serve (if not installed)
+        run: npm install -g serve
 
-            - name: Background Start The Application
-              run: pm2 start "npm run serve" --name fince-fontend 
+      - name: PM2 Delete previous process
+        run: pm2 delete fince-frontend || true
 
-            - name: Pm2 Save Process List
-              run: pm2 save
+      - name: Start production build with PM2
+        run: pm2 start serve --name fince-frontend -- -s dist -l 8080
 
-            - name: PM2 status
-              run: pm2 status
+      - name: PM2 Save Process List
+        run: pm2 save
 
+      - name: Show PM2 Status
+        run: pm2 status
