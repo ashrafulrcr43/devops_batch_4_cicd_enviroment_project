@@ -23,7 +23,7 @@ jobs:
         run: npm run build
 
       - name: Install Serve (if not installed)
-        run: npm install -g serve
+        run: sudo npm install -g serve
 
       - name: PM2 Delete previous process
         run: pm2 delete fince-frontend || true
