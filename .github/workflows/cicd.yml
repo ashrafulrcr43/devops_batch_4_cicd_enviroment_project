@@ -54,5 +54,5 @@ jobs:
         - name: PM2 Save Process List
           run: pm2 save
 
-        - name: Show PM2 Status
+        - name: Show PM2 Status 
           run: pm2 status
